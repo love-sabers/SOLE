@@ -30,12 +30,12 @@ module EXUnit (
     localparam [2:0] RND_MODE = 3'b000;
 
     // 使能信号记录,打一拍做状态判断
-    logic data_en_i_r;
+    logic data_en_i_d;
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
-            data_en_i_r<='0;
+            data_en_i_d<='0;
         end else if (enable) begin
-            data_en_i_r<=data_en_i;
+            data_en_i_d<=data_en_i;
         end
     end
 
@@ -48,7 +48,7 @@ module EXUnit (
             rnd_mode_reg <= RND_MODE;
         end else if (enable) begin
             rnd_mode_reg <= RND_MODE;
-            case ({data_en_i_r,data_en_i})
+            case ({data_en_i_d,data_en_i})
                 2'b01:begin
                     //接收第一个输入
                     data_a_reg   <= bf16_to_fp32(data_i);
@@ -83,7 +83,7 @@ module EXUnit (
             data_o<='0;
         end else if (enable) begin
             rnd_mode_reg <= RND_MODE;
-            case ({data_en_i_r,data_en_i})
+            case ({data_en_i_d,data_en_i})
                 2'b10:begin
                     data_en_o<='1;
                     data_o<=z_inst;
